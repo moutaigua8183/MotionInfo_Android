@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:text="@string/main_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" 
+       	android:layout_marginTop="50dip"
+        android:layout_marginBottom="50dip"
+        android:textSize="37sp"/>
+    <Button 
+        android:id="@+id/bt_realtime"
+        android:text="@string/bt_realtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="83dip"
+        android:paddingRight="83dip"/>
+    <Button 
+        android:id="@+id/bt_history"
+        android:text="@string/bt_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dip"
+        android:paddingLeft="83dip"
+        android:paddingRight="83dip"/>
+
+
+
+    <Button
+        android:id="@+id/bt_about"
+        android:text="@string/bt_about" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dip"
+        android:paddingLeft="114dip"
+        android:paddingRight="114dip"/>
+
+
+
+    <Button
+        android:id="@+id/bt_exit"
+        android:text="@string/bt_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dip"
+        android:paddingLeft="114dip"
+        android:paddingRight="114dip" />
+
+</LinearLayout>
+

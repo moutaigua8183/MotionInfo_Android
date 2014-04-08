@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Motion Info</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+    
+    <!-- main -->
+    <string name="main_title">运动量检测</string>
+    <string name="bt_realtime">实时数据检测</string>
+    <string name="bt_history">历史数据查询</string>
+    <string name="bt_about">关于</string>
+    <string name="bt_exit">退出</string>
+    
+    
+    <!-- realtime -->
+    <string name="realtime_title">实时数据检测</string>
+	<string name="motion_status">运动状态</string>
+	<string name="current_history">当前历史</string>
+	
+
+    <!-- devicelist -->
+	<string name="title_paired_devices">已配对设备</string>
+	<string name="title_other_devices">其它设备</string>
+	<string name="button_scan">搜索</string>
+	<string name="scanning">正在搜索</string>
+    <string name="select_device">选择一个设备连接</string>
+    <string name="none_paired">无配对设备</string>
+    <string name="none_found">没有找到新的设备</string>
+    
+    
+    <!-- history -->
+	<string name="history_title">历史数据查询</string>
+	<string name="history_spinner">请选择时间</string>
+	<string name="history_content">历史数据</string>
+	
+    
+    <!-- about -->
+	<string name="about_title">关于Motion Info</string>
+	<string name="about_content">本软件用于课题为“基于MEMS加速度传感器的运动量检测”\
+	    的毕业论文。\n\n
+	 [功能介绍]\n\n
+	    实时数据反馈： 通过蓝牙通信，将传感器的实时数据显示于手机客户端\n\n
+	    历史数据查询： 可查询历史内用户的所有运动量数据</string>
+
+</resources>
