@@ -294,7 +294,7 @@ public class RealTime extends ActionBarActivity {
         	realtime_datalist.add(mMap1);
         } 
 	    RealTimeList.setAdapter(adapter);//把arrayadapter和listview绑定
-        
+	    RealTimeList.setSelection(RealTimeList.getCount()-1);
    	}
      	/*************************记录到MM_history************************/
    private void Record2Database(String temp_status)
@@ -358,29 +358,34 @@ private void BluetoothClient()
 						switch(msg.what)
 			   			{
 			   			case 1:
-			   				status_text.setText("步行");
+			   				status_text.setText("站立");
 			   				current_time.setToNow();	   				
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "步行" );
+			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "站立" );
 			   				break;
 			   			case 2:
-			   				status_text.setText("跑步");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "跑步");
-			   				break;
-			   			case 3:
-			   				status_text.setText("站立");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "站立");
-			   				break;
-			   			case 4:
 			   				status_text.setText("平坐");
 			   				current_time.setToNow();
 			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "平坐");
 			   				break;
-			   			case 5:
-			   				status_text.setText("其它");			   				
+			   			case 3:
+			   				status_text.setText("倚靠");
 			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "其它");
+			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "倚靠");
+			   				break;
+			   			case 4:
+			   				status_text.setText("步行");
+			   				current_time.setToNow();
+			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "步行");
+			   				break;
+			   			case 5:
+			   				status_text.setText("跑步");			   				
+			   				current_time.setToNow();
+			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "跑步");
+			   				break;
+			   			case 8:
+			   				status_text.setText("摔倒");			   				
+			   				current_time.setToNow();
+			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "摔倒");
 			   				break;
 			   			case 100:
 			   				status_text.setText("连接中断");

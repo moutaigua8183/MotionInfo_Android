@@ -82,7 +82,8 @@ public class History extends ActionBarActivity {
 	        }
         }  
 	    HistoryList.setAdapter(adapter);//°ÑarrayadapterºÍlistview°ó¶¨
-        
+	    //adapter.notifyDataSetChanged();
+        HistoryList.setSelection(HistoryList.getCount()-1);
    	}
    
     
