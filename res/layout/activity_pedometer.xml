@@ -9,32 +9,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center" 
-       	android:layout_marginTop="20dip"
+       	android:layout_marginTop="80dip"
         android:layout_marginBottom="30dip"
         android:textSize="33sp"/>
     
     <TextView
-        android:text="@string/realtime_motion_status"
-        android:id="@+id/realtime_motion_status"
+        android:text="@string/pedometer_motion_status"
+        android:id="@+id/pedometer_motion_status"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center" 
-       	android:layout_marginTop="5dip"
+       	android:layout_marginTop="15dip"
+        android:layout_marginBottom="30dip"
+        android:textSize="30sp"/>    
+    
+    <TextView
+        android:text="@string/step_number"
+        android:id="@+id/step_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" 
+       	android:layout_marginTop="15dip"
         android:layout_marginBottom="30dip"
         android:textSize="30sp"/>
     
-    <ListView
-        android:id="@+id/realtime_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:smoothScrollbar="true"
-        android:transcriptMode="alwaysScroll"
-        android:footerDividersEnabled="false"
-        android:textColor="#CD853F"
-        android:background="#87CEFA"
-        android:cacheColorHint="#00000000"
-        android:divider="#FFCC00"
-        android:fadingEdge="none"/>
 
 </LinearLayout>

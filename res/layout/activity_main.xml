@@ -9,50 +9,52 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center" 
-       	android:layout_marginTop="50dip"
-        android:layout_marginBottom="50dip"
+       	android:layout_marginTop="40dip"
+        android:layout_marginBottom="30dip"
         android:textSize="37sp"/>
+    <Button 
+        android:id="@+id/bt_pedometer"
+        android:text="@string/bt_pedometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="98dip"
+        android:paddingRight="98dip"/>    
     <Button 
         android:id="@+id/bt_realtime"
         android:text="@string/bt_realtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="19dip"
         android:paddingLeft="83dip"
-        android:paddingRight="83dip"/>
+        android:paddingRight="83dip"/>    
     <Button 
         android:id="@+id/bt_history"
         android:text="@string/bt_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="25dip"
+        android:layout_marginTop="19dip"
         android:paddingLeft="83dip"
         android:paddingRight="83dip"/>
-
-
-
     <Button
         android:id="@+id/bt_about"
         android:text="@string/bt_about" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="25dip"
+        android:layout_marginTop="19dip"
         android:paddingLeft="114dip"
         android:paddingRight="114dip"/>
-
-
-
     <Button
         android:id="@+id/bt_exit"
         android:text="@string/bt_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="25dip"
+        android:layout_marginTop="19dip"
         android:paddingLeft="114dip"
         android:paddingRight="114dip" />
-
 </LinearLayout>
 

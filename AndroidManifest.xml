@@ -9,6 +9,7 @@
         android:targetSdkVersion="15" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.VIBRATE" /> 
 
     <application
         android:allowBackup="true"
@@ -31,6 +32,10 @@
         <activity
             android:name=".RealTime"
             android:label="@string/realtime_title" android:screenOrientation="nosensor">      
+        </activity>
+        <activity
+            android:name=".Pedometer"
+            android:label="@string/pedometer_title" android:screenOrientation="nosensor">      
         </activity>
         <activity
             android:name=".BluetoothDeviceList" android:screenOrientation="nosensor">

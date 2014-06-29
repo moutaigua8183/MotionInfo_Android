@@ -17,8 +17,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener{
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
        
-      
-       
+       View pedoButton = this.findViewById(R.id.bt_pedometer);
+       pedoButton.setOnClickListener(this); 
        View btButton = this.findViewById(R.id.bt_realtime);
        btButton.setOnClickListener(this);
        View msgButton = this.findViewById(R.id.bt_history);
@@ -29,14 +29,20 @@ public class MainActivity extends ActionBarActivity implements OnClickListener{
        exitButton.setOnClickListener(this);       
     }
    
-    public void onClick(View v){
+    public void onClick(View v)
+    {
 		final Intent i;
-   	switch (v.getId()){
-		case R.id.bt_realtime:
+	   	switch (v.getId())
+	   	{
+	   	case R.id.bt_pedometer:
+			i = new Intent(this, Pedometer.class);
+			startActivity(i);
+			break;
+   		case R.id.bt_realtime:
 			i = new Intent(this, RealTime.class);
 			startActivity(i);
 			break;
-		case R.id.bt_history:
+   		case R.id.bt_history:
 			i = new Intent(this, History.class);
 			startActivity(i);
 			break;

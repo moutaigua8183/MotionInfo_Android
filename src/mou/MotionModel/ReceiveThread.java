@@ -48,7 +48,9 @@ public class ReceiveThread extends Thread {
 	            	if ( byteReceived>0 )
 	            	{			            		
 		            	Message msg = new Message();
-			    	    msg.what= (int)RECEIVED_BYTE[0]-48;			//BYTE里存的是ACKII对应的十进制的数，'1'对应49
+			    	    msg.what= (int)RECEIVED_BYTE[0]-48;			//BYTE里存的是ACKII对应的十进制表示，'1'对应49
+			    	    if(msg.what==0)
+			    	    	msg.what=30;
 			    	    receiveThread_Handler.sendMessage(msg);
 	            	}
             	}

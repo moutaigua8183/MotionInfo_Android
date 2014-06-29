@@ -2,8 +2,6 @@ package mou.MotionModel;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -15,21 +13,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import mou.MotionModel.database;
 import mou.MotionModel.ReceiveThread;
-import android.os.Vibrator; 
 
 @SuppressLint("HandlerLeak")
-public class RealTime extends ActionBarActivity {
+public class Pedometer extends ActionBarActivity {
 	
 	
 	/**************************当前时间**********************************/
@@ -39,10 +32,6 @@ public class RealTime extends ActionBarActivity {
 	private Handler timer_handler = null;  
     private TextView current_time_text = null;
     private String current_time_str = null;
-    /**************************数据库**********************************/
-	private database mydb = new database(this);
-	private Cursor realtime_dataCur = null;
-	private ListView RealTimeList = null;
 
 	/****************************蓝牙************************************/
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -59,28 +48,24 @@ public class RealTime extends ActionBarActivity {
     public static final String DEVICE_NAME = null;
     public static final String TOAST = "toast";
     private TextView status_text = null;
+    private TextView number_text = null;
+    private int WALK_STEPS=0;
+    private int RUN_STEPS=0;
     				/***蓝牙接收线程**/
     private static final String RECEIVETHREAD_NAME = "ReceiveThread";
     private ReceiveThread receiveThread;
     private Handler receiveThread_Handler = null;
-    				/***蓝牙发送变量**/
-    private static OutputStream MYOUTPUTSTREAM;
+					/***蓝牙发送变量**/
+	private static OutputStream MYOUTPUTSTREAM;
     //private Runnable Reading_Data_Runnable = null;
-    /***************************震动器***********************************/
-    private Vibrator vibrator = null;
+	
 	
     
     @Override
    public void onCreate(Bundle savedInstanceState) 
    {
        super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_realtime);
-       
-       
-       /*******************************震动器*********************************/
-       vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-       /**********************************************************************/
-       
+       setContentView(R.layout.activity_pedometer);
        
        /***********************显示系统时间块*******************************/
        int task_delay_sec = 0;
@@ -152,26 +137,11 @@ public class RealTime extends ActionBarActivity {
    		update_time_timer.schedule(update_time_task,task_delay_sec*1000, 60000); //延时一定时间后执行，60s执行一次
    		
    		/**********************************************************************/
-       
-   		/**********************数据记录数据库写入块*****************************/
-   		//Create database
-        mydb.CreateDatabase(this, databaseHelper.DATABASE_NAME);
-        mydb.CreateTable();
-        mydb.CreateTempTable();
-        mydb.OpenDb();
-        Init_RealTime_List();
-        //RecordInRealTime("00","55", "飞");
-        //update_list("15", "12", "站立");
-        //update_list("15", "13", "步行");
-        //update_list("15", "13", "跑步");
-        //update_list("15", "14", "平坐");
-        //status_text = (TextView)this.findViewById(R.id.realtime_motion_status);
-        //status_text.setText("平坐");		
    		
-   		/**********************************************************************/       
         
         /******************************蓝牙通信块*******************************/
-        status_text = (TextView)this.findViewById(R.id.realtime_motion_status); 
+        status_text = (TextView)this.findViewById(R.id.pedometer_motion_status);
+        number_text = (TextView)this.findViewById(R.id.step_number);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) 
         {
@@ -192,7 +162,6 @@ public class RealTime extends ActionBarActivity {
 		}
         
         /**********************************************************************/
-                
     }
     
     
@@ -242,109 +211,32 @@ public class RealTime extends ActionBarActivity {
     @Override
     protected void onDestroy() 
     {
-    	super.onDestroy();
-    	Record2Database("连接中断");
-    	update_time_timer.cancel();
-    	mydb.CloseDb();
-    	mydb.DeleteTable();
-    	if ( null!=vibrator ){    
-    		vibrator.cancel();    
-    	}    
-	   
-	   //if (bluetoothAdapter.isEnabled() )
-	   //   	bluetoothAdapter.disable();
-    	if( MYOUTPUTSTREAM!=null )
-        {
- 	       try {
- 				MYOUTPUTSTREAM.write('9');//告诉单片机功能退出
- 			} catch (IOException e) 
- 			{ }	
-        }
-	   try 
-	   {
-		   bluetoothSocket.close();
-	   } 
-	   catch (IOException e) 
-	   {
-		   e.printStackTrace();
-	   }
+       super.onDestroy();
+       update_time_timer.cancel();
+       //if (bluetoothAdapter.isEnabled() )
+       //   	bluetoothAdapter.disable();
+       if( MYOUTPUTSTREAM!=null )
+       {
+	       try {
+				MYOUTPUTSTREAM.write('9');//告诉单片机功能退出
+			} catch (IOException e) 
+			{ }	
+       }
+       try 
+       {
+    	   bluetoothSocket.close();
+       } 
+       catch (IOException e) 
+       {
+    	   e.printStackTrace();
+       }
        
     }
    
    
     
    /*****************************自定义函数*********************************/
-    	/************************初始化List****************************/
-    private void Init_RealTime_List()
-    {
     	
-    	RealTimeList = (ListView) findViewById(R.id.realtime_list); 
-    	ArrayList<HashMap<String,Object>> realtime_datalist=new ArrayList<HashMap<String,Object>>();
-    	SimpleAdapter adapter = new SimpleAdapter(this,realtime_datalist,
-                R.layout.realtime_list_item,      
-                new String[] {"realtime_item_time","realtime_item_status"},   
-                new int[] {R.id.realtime_item_time,R.id.realtime_item_status}  
-            ); 
-    	realtime_datalist.clear();
-    	HashMap<String, Object> mMap = new HashMap<String, Object>();
-    	mMap.put("realtime_item_time",  "时间");
- 	   	mMap.put("realtime_item_status",  "运动状态" );
- 	   	realtime_datalist.add(mMap);
- 	   	RealTimeList.setAdapter(adapter);//把arrayadapter和listview绑定
-    }
-    
-    	/**********************记录到MM_temp并更新List**********************/
-    private void update_list(String strHour, String strMinute, String strStatus)
-   	{
-    	mydb.InsertData2Temp(strHour, strMinute, strStatus);
-    	RealTimeList = (ListView) findViewById(R.id.realtime_list);
-    	ArrayList<HashMap<String,Object>> realtime_datalist=new ArrayList<HashMap<String,Object>>();
-    	SimpleAdapter adapter = new SimpleAdapter(this,realtime_datalist,
-                R.layout.realtime_list_item,      
-                new String[] {"realtime_item_time","realtime_item_status"},   
-                new int[] {R.id.realtime_item_time,R.id.realtime_item_status}  
-            ); 
-    	realtime_datalist.clear();
-    	HashMap<String, Object> temp_mMap = new HashMap<String, Object>();
-    	temp_mMap.put("realtime_item_time", "时间"); 
-        temp_mMap.put("realtime_item_status", "运动状态"); 
-        realtime_datalist.add(temp_mMap);
-    	realtime_dataCur = mydb.PickFromTempTable();
-        for ( realtime_dataCur.moveToFirst();!realtime_dataCur.isAfterLast();realtime_dataCur.moveToNext())
-        {    	
-        	HashMap<String, Object> mMap1 = new HashMap<String, Object>();
-        	String data_time =
-        			realtime_dataCur.getString(realtime_dataCur.getColumnIndex(database.DATA_HOUR))
-        			+ ':'
-        			+ realtime_dataCur.getString(realtime_dataCur.getColumnIndex(database.DATA_MINUTE));
-        	mMap1.put("realtime_item_time",  data_time );
-        	String data_status = realtime_dataCur.getString(realtime_dataCur.getColumnIndex(database.DATA_STATUS));
-        	mMap1.put("realtime_item_status",  data_status );
-        	realtime_datalist.add(mMap1);
-        } 
-	    RealTimeList.setAdapter(adapter);//把arrayadapter和listview绑定
-	    RealTimeList.setSelection(RealTimeList.getCount()-1);
-   	}
-     	/*************************记录到MM_history************************/
-   private void Record2Database(String temp_status)
-   {
-	   mydb.OpenDb();
-	   current_time.setToNow();
-	   int year = current_time.year;
-	   int month = current_time.month + 1; //0为1月
-	   int day = current_time.monthDay;
-	   int hour = current_time.hour;
-	   int minute = current_time.minute;
-	   mydb.InsertData(year, month, day, hour, minute, temp_status);
-       mydb.CloseDb();   
-   }
-   
-     	/*************************记录到Database*****************************/
-   private void RecordInRealTime(String temp_hour, String temp_minute, String temp_status)
-   {
-	   update_list(temp_hour, temp_minute, temp_status);
-	   Record2Database(temp_status);   
-   }
    		/*************************蓝牙客户端构建************************/
    @SuppressLint("NewApi")
 private void BluetoothClient()
@@ -385,66 +277,27 @@ private void BluetoothClient()
 				} catch (IOException e) { }
 				MYOUTPUTSTREAM = tmpOut;
 				try {
-					MYOUTPUTSTREAM.write('1');//告诉单片机这是运动检测
+					MYOUTPUTSTREAM.write('3');//告诉单片机这是计步器
 				} catch (IOException e) 
-				{ }				
+				{ }		
 				receiveThread_Handler = new Handler(){
 					@Override
 		   			public void handleMessage(Message msg)
 			   		{
-			   			int hour = current_time.hour;
-			   			int minute = current_time.minute;
 						switch(msg.what)
 			   			{
-			   			case 1:
-			   				status_text.setText("站立");
-			   				current_time.setToNow();	   				
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "站立" );
-			   				break;
-			   			case 2:
-			   				status_text.setText("平坐");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "平坐");
-			   				break;
-			   			case 3:
-			   				status_text.setText("倚靠");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "倚靠");
-			   				break;
 			   			case 4:
+			   				WALK_STEPS=WALK_STEPS+1;				
 			   				status_text.setText("步行");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "步行");
+		   					number_text.setText(String.valueOf(WALK_STEPS));
 			   				break;
 			   			case 5:
-			   				status_text.setText("跑步");			   				
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "跑步");
-			   				break;
-			   			case 8:
-			   				status_text.setText("摔倒");			   				
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "摔倒");
-			   				vibrator.vibrate(1500);
+			   				RUN_STEPS=RUN_STEPS+1;		   				
+			   				status_text.setText("跑步");
+		   					number_text.setText(String.valueOf(RUN_STEPS));
 			   				break;
 			   			case 27:
-			   				status_text.setText("初始化完成");			   				
-			   				break;
-			   			case 30:
-			   				status_text.setText("未知运动");			   				
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "未知运动");
-			   				break;
-			   			case 100:
-			   				status_text.setText("连接中断");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "连接中断");
-			   				break;
-			   			case 101:
-			   				status_text.setText("连接成功");
-			   				current_time.setToNow();
-			   				RecordInRealTime( String.valueOf(hour), String.valueOf(minute), "连接成功");
-			   				break;
+			   				status_text.setText("初始化完成");	
 			   			}
 			   			super.handleMessage(msg);
 			   		}
@@ -464,6 +317,10 @@ private void BluetoothClient()
 		   
    }
 			  
+   
+	
+   
+
    
    
 
